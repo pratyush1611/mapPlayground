@@ -1,0 +1,13 @@
+{
+    "mapInit":
+    {
+        "longitude": 4.367779,
+        "latitude": 52.008225,
+        "zoom": 14,
+        "maxZoom": 20,
+        "minZoom": 4,
+        "pitch": 0,
+        "bearing": 0
+    },
+    "mapStyle": "mapbox://styles/pratyushkumar/cksnq41aa0t1r17o6f4hzis3d?fresh=true"
+  }
