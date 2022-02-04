@@ -1,13 +1,11 @@
 import React from "react";
 import DeckGL from "deck.gl";
 import { StaticMap } from 'react-map-gl';
-import {GeoJsonLayer} from '@deck.gl/layers';
+import {GeoJsonLayer, BitmapLayer} from '@deck.gl/layers';
+import {TileLayer} from '@deck.gl/geo-layers';
 
 import settings from "./settings/settings.json"
 import places_103 from "./data/103_places.geojson"
-
-// const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
-const mapStyle = settings.mapStyle;
 
 const INITIAL_VIEW_STATE = settings.mapInit;
 export default class App extends React.Component 
@@ -41,6 +39,28 @@ export default class App extends React.Component
       }) // end new geojson layer
 
       ); //end push layer
+
+      layers.push(
+        new TileLayer({
+          data: 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+
+          minZoom: 0,
+          maxZoom: 19,
+          tileSize: 256,
+
+          renderSubLayers: props => {
+            const {bbox: {west, south, east, north} } = props.tile;
+
+            return new BitmapLayer(props, {
+              data: null,
+              image: props.data,
+              bounds: [west, south, east, north]
+            });
+          }
+
+        }) // end new tile layer
+  
+      ); //end push layer
       
       return layers;
   }
@@ -62,7 +82,7 @@ export default class App extends React.Component
           }
         >
           <StaticMap 
-            mapStyle={mapStyle} 
+            mapStyle={settings.mapStyle} 
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN} 
             asyncRender={false}
             dragRotate={true}
